@@ -39,6 +39,10 @@ const movieSchema = new mongoose.Schema({
     required: [true, "Cast is required"],
     enum: ["RELEASED", "BLOCKED", "UNRELEASED"]
   },
+  duration: {
+    type: [Number, 'duration should be in number as Minutes (e.g 120 it will considered 120mins) '],
+    required: true
+  }
 }, {timestamps: true});
 
 module.exports = mongoose.model('Movie', movieSchema);

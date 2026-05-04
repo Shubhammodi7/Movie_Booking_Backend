@@ -25,7 +25,9 @@ const movieCreateSchema = z.object({
 
   releaseStatus: z.enum(["RELEASED", "BLOCKED", "UNRELEASED"], {
     errorMap: () => ({message: "Status must be RELEASED, BLOCKED, UNRELEASED"})
-  })
+  }),
+  duration: z.number({required_error: "duration of movie is required ans it should be in minutes"})
+    .min(60, "Any movie cant have less duration than 60 minutes")
 })
 
 const movieUpdateSchema = movieCreateSchema.partial();

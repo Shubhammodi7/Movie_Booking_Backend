@@ -1,8 +1,15 @@
 const Theatre = require('../models/theatre.model');
 
-const createTheatre = async (theatreData) => {
+const createTheatre = async (theatreData, ownerId) => {
   try {
-    const theatre = await Theatre.create(theatreData);
+    const theatre = await Theatre.create({...theatreData, owner: ownerId});
+
+    await User.findByIdAndUpdate(
+      ownerId,
+      { $push: { ownedTheatres: theatre._id } },
+      { new: true }
+    );
+
     return theatre;
   } catch (error) {
     if (error.code === 11000) {
@@ -22,7 +29,9 @@ const createTheatre = async (theatreData) => {
 
 const getAllTheatre = async (query) => {
   const theatres = await Theatre.find(query);
-  return theatres;
+
+  const response = theatres.filter(t => t.isApproved !== false);
+  return response;
 }
 
 const getTheatreById = async (id) => {
@@ -73,4 +82,14 @@ const deleteTheatre = async (id) => {
   }
 }
 
-module.exports = {createTheatre, getAllTheatre, getTheatreById, updateTheatre, deleteTheatre}
+const getAllTheatreOfOwner = async (ownerId) => {
+  const theatres = await Theatre.find({ owner: ownerId });
+  
+  if (!theatres) {
+    throw new Error("No theatres found for this owner");
+  }
+  
+  return theatres;
+};
+
+module.exports = {createTheatre, getAllTheatre, getTheatreById, updateTheatre, deleteTheatre, getAllTheatreOfOwner}

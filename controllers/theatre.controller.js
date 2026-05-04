@@ -4,7 +4,7 @@ const {successBody, errorBody} = require('../utils/response');
 const createTheatre = async (req, res) => {
   try {
 
-    const response = await theatreService.createTheatre(req.body);
+    const response = await theatreService.createTheatre(req.body, req.user._id);
 
     return res.status(201).json(
       successBody(response, "New Movie Added")
@@ -51,6 +51,10 @@ const getTheatreById = async (req, res) => {
   try {
     const response = await theatreService.getTheatreById(req.params.id);
 
+    if(response.isApproved === false){
+      return res.status(403).json({message: "This theatre is not approved by admin"})
+    } 
+
     return res.status(200).json(successBody(response, "Found Movie Matching to ID"));
   } catch (error) {
     return res.status(500).json(errorBody(error, error.message));
@@ -59,6 +63,7 @@ const getTheatreById = async (req, res) => {
 
 const updateTheatre = async (req, res) => {
   try {
+
     const response = await theatreService.updateTheatre(req.params.id, req.body);
 
     return res.status(200).json(successBody(response, "Updated the existing theatre"));
@@ -79,10 +84,31 @@ const deleteTheatre = async (req, res) => {
   }
 }
 
+const getAllTheatreOfOwner = async (req, res) => {
+  try {
+    const response = await theatreService.getAllTheatreOfOwner(req.user._id);
+
+
+    return res.status(200).json({
+      success: true,
+      data: response,
+      message: "Successfully fetch your theatres"
+    })
+
+  } catch (error) {
+    const status = error.statusCode || 500;
+    return res.status(status).json({
+      success: false,
+      message: error.message || "Internal server error"
+    })
+  }
+}
+
 module.exports = {
   createTheatre,
   getAllTheatre,
   getTheatreById,
   updateTheatre,
-  deleteTheatre
+  deleteTheatre,
+  getAllTheatreOfOwner
 }
