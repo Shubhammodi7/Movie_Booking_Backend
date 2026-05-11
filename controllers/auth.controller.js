@@ -146,5 +146,4 @@ const getPendingTheatres = async (req, res) => {
 
 
 
-
 module.exports = {registerUser, loginUser, logoutUser, seeProfile, updateUser, getAllUsers, getUserById, toggleTheatreById, getPendingTheatres}

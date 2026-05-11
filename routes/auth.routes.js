@@ -5,27 +5,20 @@ const {registerUserSchema, loginUserSchema} = require('../validators/auth.valida
 const validate = require('../middlewares/validator.middleware');
 const {isLoggedIn, isAdmin, isAppUser, isTheatreOwner} = require('../middlewares/auth.middleware')
 
+// PUBLIC
 router.post('/register', validate(registerUserSchema), registerUser);
-
 router.post('/login', validate(loginUserSchema), loginUser);
+router.post('/logout', logoutUser);
 
-router.post('/logout', logoutUser)
+// AUTHENTICATED USER
+router.get('/profile', isLoggedIn, seeProfile);
+router.patch('/profile/update', isLoggedIn, updateUser);
 
-router.get('/getprofile', isLoggedIn, seeProfile);
-
-router.patch('/update', isLoggedIn, updateUser)
-
-
-
-// --------- ADMIN ROUTES ------------
+// ADMIN
 router.get('/admin/users', isLoggedIn, isAdmin, getAllUsers);
-
 router.get('/admin/users/:id', isLoggedIn, isAdmin, getUserById);
-
-router.get('/admin/theatres/pending', isLoggedIn, isAdmin, getPendingTheatres)
-
+router.get('/admin/theatres/pending', isLoggedIn, isAdmin, getPendingTheatres);
 router.patch('/admin/theatres/:id/toggle', isLoggedIn, isAdmin, toggleTheatreById);
-
 
 
 

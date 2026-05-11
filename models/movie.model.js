@@ -40,8 +40,8 @@ const movieSchema = new mongoose.Schema({
     enum: ["RELEASED", "BLOCKED", "UNRELEASED"]
   },
   duration: {
-    type: [Number, 'duration should be in number as Minutes (e.g 120 it will considered 120mins) '],
-    required: true
+    type: Number,
+    required: [true, 'duration should be in number as Minutes (e.g 120 it will considered 120mins']
   }
 }, {timestamps: true});
 

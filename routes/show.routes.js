@@ -4,18 +4,19 @@ const {validate} = require('../middlewares/movie.middleware');
 const {showCreateSchema, showUpdateSchema} = require('../validators/show.validator');
 const {createShow, getShows, getShowByTheatreId, getShowByTheatreName, getShowByMovieName, getShowById, updateShowById, deleteShowById} = require('../controllers/show.controller');
 const {paginate} = require('../middlewares/pagination.middleware')
+const {isLoggedIn, canManageShow} = require('../middlewares/auth.middleware')
 
 
 // -------- ADMIN ROUTES ----------
 
 //router: POST /mba/api/v1/show
-router.post('/show',validate(showCreateSchema), createShow);
+router.post('/show', isLoggedIn, canManageShow, validate(showCreateSchema), createShow);
 
 //router: PATCH /mba/api/v1/show
-router.patch('/show/:id', validate(showUpdateSchema), updateShowById)
+router.patch('/show/:id', isLoggedIn, canManageShow, validate(showUpdateSchema), updateShowById)
 
 //router: DELETE /mba/api/v1/show
-router.delete('/show/:id', deleteShowById)
+router.delete('/show/:id', isLoggedIn, canManageShow, deleteShowById)
 
 
 

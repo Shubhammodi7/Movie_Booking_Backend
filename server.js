@@ -7,12 +7,16 @@ const cookieParser = require('cookie-parser')
 
 const app = express();
 
+const initBookingCron = require('./utils/booking.cron');
+initBookingCron();
+
 app.use(express.json()); // This parses the incoming JSON
 
 const movieRoutes = require('./routes/movie.routes')
 const theatreRoutes = require('./routes/theatre.routes')
 const showRoutes = require('./routes/show.routes');
 const authRoutes = require('./routes/auth.routes');
+const bookingRoutes = require('./routes/booking.routes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +31,7 @@ app.use('/mba/api/v1', movieRoutes);
 app.use('/mba/api/v1', theatreRoutes);
 app.use('/mba/api/v1', showRoutes);
 app.use('/mba/api/v1', authRoutes);
+app.use('/mba/api/v1', bookingRoutes);
 
 
 

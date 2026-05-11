@@ -55,6 +55,19 @@ const isTheatreOwner = (req, res, next) => {
   }
 };
 
+const canManageShow = (req, res, next) => {
+  // Check if the user is an Admin OR a Theatre Owner
+  if (req.user.role === 'admin' || req.user.role === 'theatreOwner') {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Only Admins or Theatre Owners can perform this action."
+    });
+  }
+};
+
+
 // Check if the user is a regular App User
 const isAppUser = (req, res, next) => {
   if (req.user && req.user.role === 'user') {
@@ -67,4 +80,4 @@ const isAppUser = (req, res, next) => {
   }
 };
 
-module.exports = { isLoggedIn, isAdmin, isTheatreOwner, isAppUser };
+module.exports = { isLoggedIn, isAdmin, isTheatreOwner, isAppUser, canManageShow };
