@@ -1,5 +1,6 @@
 const paymentService = require('../services/payment.services');
 const { successBody, errorBody } = require('../utils/response');
+const logger = require('../utils/logger');
 
 const verifyPayment = async (req, res) => {
   try {
@@ -9,6 +10,7 @@ const verifyPayment = async (req, res) => {
 
     return res.status(200).json(successBody(response.payment, response.message));
   } catch (error) {
+    logger.error(`[Payment Error] User ${req.user.id}: ${error.message}`);
     const status = error.statusCode || 500;
     return res.status(status).json(errorBody(error, error.message));
   }

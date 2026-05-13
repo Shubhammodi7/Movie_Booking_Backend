@@ -1,11 +1,12 @@
 const cron = require('node-cron');
 const Booking = require('../models/booking.model');
 const Show = require('../models/show.model');
+const logger = require('./logger');
 
 const initBookingCron = () => {
   cron.schedule('0 */10 * * *', async () => {
     try {
-      console.log('--- Cron Job Started: Updating Expired Bookings ---');
+      logger.info('--- Cron Job Started: Updating Expired Bookings ---');
       
       const pastShows = await Show.find({ datetime: { $lt: new Date() } }).select('_id');
       const showIds = pastShows.map(s => s._id);
@@ -15,9 +16,9 @@ const initBookingCron = () => {
         { $set: { status: 'EXPIRED' } }
       );
 
-      console.log(`--- Cron Job Finished: ${result.modifiedCount} bookings updated ---`);
+      logger.info(`--- Cron Job Finished: ${result.modifiedCount} bookings updated ---`);
     } catch (error) {
-      console.error('Cron Job Error:', error);
+      logger.error('Cron Job Error:', error);
     }
   });
 };

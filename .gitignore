@@ -2,3 +2,8 @@
 node_modules/
 package-lock.json/
 package.json/
+
+# Logs
+logs/
+*.log
+npm-debug.log*

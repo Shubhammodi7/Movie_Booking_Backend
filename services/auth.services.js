@@ -2,7 +2,8 @@ const User = require('../models/auth.model');
 const Theatre = require('../models/theatre.model');
 const jwt = require('jsonwebtoken')
 const dotenvResult = require('dotenv').config()
-const { JWT_SECRET, JWT_EXPIRES_IN } = dotenvResult.parsed || {}
+const { JWT_SECRET, JWT_EXPIRES_IN } = dotenvResult.parsed || {};
+const logger = require('../utils/logger');
 
 const registerUser = async (userData) => {
   const user = await User.create(userData);
@@ -28,7 +29,7 @@ const registerUser = async (userData) => {
 
   const token = jwt.sign({_id: user._id, role: user.role}, JWT_SECRET, {expiresIn: '3d'})
 
-  console.log("Generated JWT Token:", token);
+  logger.info("Generated JWT Token:", token);
 
   const userResponse = user.toObject();
   delete userResponse.password;

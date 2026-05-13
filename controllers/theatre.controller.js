@@ -1,5 +1,6 @@
 const  theatreService = require('../services/theatre.services')
 const {successBody, errorBody} = require('../utils/response');
+const logger = require('../utils/logger');
 
 const createTheatre = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ const createTheatre = async (req, res) => {
 
   } catch (error) {
     const status = error.statusCode || 500;
-    console.log(error.message)
+    logger.error(error.message)
         
     return res.status(status).json(
       errorBody(error, error.message || "Internal server error")

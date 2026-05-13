@@ -1,15 +1,16 @@
 const showService = require('../services/show.services');
 const {successBody, errorBody} = require('../utils/response');
+const logger = require('../utils/logger');
 
 const createShow = async (req, res) => {
   try {
-    console.log(req.body);
+    logger.info(req.body);
     const response = await showService.createShow(req.body);
 
     return res.status(201).json(successBody(response, "show successfully Created"));
   } catch (error) {
     const status = error.statusCode || 500;
-    console.log(error.message)
+    logger.info(error.message)
         
     return res.status(status).json(
       errorBody(error, error.message || "Internal server error")

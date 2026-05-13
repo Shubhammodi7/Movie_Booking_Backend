@@ -1,5 +1,6 @@
 const bookingService = require('../services/booking.services');
 const {successBody, errorBody} = require('../utils/response')
+const logger = require('../utils/logger');
 
 
 // -------- USER CONTROLLERS ----------
@@ -11,7 +12,7 @@ const createBooking = async (req, res) => {
     return res.status(201).json(successBody(response, "Your booking successful"))
   } catch (error) {
     const status = error.statusCode || 500;
-    console.error(`[Booking Error]: ${error.message}`);
+    logger.error(`[Booking Error]: ${error.message}`);
             
     return res.status(status).json(
       errorBody(error, error.message || "Internal server error")

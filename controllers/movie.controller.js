@@ -1,5 +1,6 @@
 const movieService = require('../services/movie.services')
 const {successBody, errorBody} = require('../utils/response')
+const logger = require('../utils/logger');
 
 
 const createMovie = async (req, res) => {
@@ -12,7 +13,7 @@ const createMovie = async (req, res) => {
 
     } catch (error) {
         const status = error.statusCode || 500;
-        console.log(error.message)
+        logger.info(error.message)
         
         return res.status(status).json(
             errorBody(error.message || "Internal server error", error)
@@ -79,7 +80,7 @@ const updateMovie = async (req, res) => {
 
 
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return res.status(500).json({message: "Internal server error"});
   }
 }
